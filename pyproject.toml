@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "sakuva-api"
+version = "0.1.0"
+description = ""
+authors = ["Markus Juopperi <markus@juopperi.io>"]
+readme = "README.md"
+packages = [{include = "sakuva_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.88.0"
+elasticsearch = {extras = ["async"], version = "^8.5.3"}
+psycopg = {extras = ["binary"], version = "^3.1.7"}
+uvicorn = {extras = ["standard"], version = "^0.20.0"}
+python-dotenv = "^0.21.0"
+python-multipart = "^0.0.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+
+[tool.black]
+line-length = 120
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
