@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from pydantic import BaseSettings, Field
 
 
@@ -18,3 +20,11 @@ class Settings(BaseSettings):
         # https://docs.pydantic.dev/usage/settings/#dotenv-env-support
         # Environment variables will always take priority over values loaded from a dotenv file.
         env_file = ".env"
+
+
+@lru_cache
+def get_settings() -> Settings:
+    """
+    https://fastapi.tiangolo.com/advanced/settings/#creating-the-settings-only-once-with-lru_cache
+    """
+    return Settings()

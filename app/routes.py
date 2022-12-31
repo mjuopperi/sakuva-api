@@ -3,12 +3,12 @@ import os
 from fastapi import APIRouter, UploadFile, HTTPException, Depends
 from psycopg.rows import class_row
 
-from app.config import Settings
+from app.config import get_settings
 from app.dependencies import verify_api_key
 from app.models import ImageIn, ImageOut
 from app.services.db import db
 
-settings = Settings()
+settings = get_settings()
 router = APIRouter(prefix="/api")
 
 BASE_IMG_PATH = f"{settings.media_dir}/img"

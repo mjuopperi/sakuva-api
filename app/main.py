@@ -2,9 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 
 from app import routes
-from app.config import Settings
 
-settings = Settings()
 app = FastAPI(title="SA-kuva API")
 
 app.include_router(routes.router)

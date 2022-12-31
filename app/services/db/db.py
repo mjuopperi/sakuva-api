@@ -5,9 +5,9 @@ import psycopg
 from psycopg.conninfo import make_conninfo
 from psycopg.rows import dict_row, RowFactory
 
-from app.config import Settings
+from app.config import get_settings
 
-settings = Settings()
+settings = get_settings()
 
 
 @contextmanager
