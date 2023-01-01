@@ -3,7 +3,7 @@ import os
 from datetime import date
 from typing import List
 
-from fastapi import APIRouter, UploadFile, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, HTTPException, Depends, BackgroundTasks
 from psycopg.rows import class_row
 import PIL.Image
 
@@ -12,7 +12,7 @@ from app.dependencies import verify_api_key
 from app.models import ImageIn, ImageOut
 from app.services.db import db
 from app.services import es
-from app.services import image as image_service
+from app.services.image import create_thumbnail
 from app.util import filename_to_path
 
 settings = get_settings()
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api")
 
 
 @router.post("/image", status_code=201, dependencies=[Depends(verify_api_key)])
-async def post_image(image_file: UploadFile):
+async def post_image(image_file: UploadFile, background_tasks: BackgroundTasks):
     file_path = filename_to_path(image_file.filename)
     try:
         image_dir = os.path.dirname(file_path)
@@ -31,7 +31,7 @@ async def post_image(image_file: UploadFile):
         image.save(file_path)
 
         for size in settings.thumbnail_sizes:
-            image_service.create_thumbnail(image, size, image_dir, image_file.filename)
+            background_tasks.add_task(create_thumbnail, image, size, image_dir, image_file.filename)
 
         return "ok"
     except Exception as e:
