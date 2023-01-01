@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import List
 
 from pydantic import BaseSettings, Field
 
@@ -16,6 +17,8 @@ class Settings(BaseSettings):
 
     # Absolute path to data dir where images etc. are stored
     media_dir: str
+
+    thumbnail_sizes: List[int] = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200]
 
     api_key: str
 
