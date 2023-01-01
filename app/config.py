@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     db_username: str
     db_password: str
 
+    es_host: str
+    es_index: str
+
     # Absolute path to data dir where images etc. are stored
     media_dir: str
 
