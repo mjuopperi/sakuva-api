@@ -1,0 +1,53 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: "${POSTGRES_USERNAME}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: sakuva
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  es:
+    image: elasticsearch:8.5.3
+    environment:
+     - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+     - "bootstrap.memory_lock=true"
+     - "discovery.type=single-node"
+     - "xpack.security.enabled=false"
+     - "xpack.security.enrollment.enabled=false"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  api:
+    image: mjuopperi/sakuva-api:latest
+    environment:
+      - "DB_HOST=localhost"
+      - "DB_PORT=5432"
+      - "DB_NAME=sakuva"
+      - "DB_USERNAME=${POSTGRES_USERNAME}"
+      - "DB_PASSWORD=${POSTGRES_PASSWORD}"
+      - "ES_HOST=http://localhost:9200"
+      - "ES_INDEX=images"
+      - "MEDIA_DIR=/data/media"
+      - "API_KEY=${API_KEY}"
+
+volumes:
+  pg_data:
+    driver: local
+  es_data:
+    driver: local
