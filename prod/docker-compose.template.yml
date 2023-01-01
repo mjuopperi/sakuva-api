@@ -45,9 +45,19 @@ services:
       - "ES_INDEX=images"
       - "MEDIA_DIR=/data/media"
       - "API_KEY=${API_KEY}"
+    ports:
+      - "8000:8000"
+    volumes:
+      - media:/data/media
 
 volumes:
   pg_data:
     driver: local
   es_data:
     driver: local
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/media
