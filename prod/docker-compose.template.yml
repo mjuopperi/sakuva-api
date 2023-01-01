@@ -36,12 +36,12 @@ services:
   api:
     image: mjuopperi/sakuva-api:latest
     environment:
-      - "DB_HOST=localhost"
+      - "DB_HOST=db"
       - "DB_PORT=5432"
       - "DB_NAME=sakuva"
       - "DB_USERNAME=${POSTGRES_USERNAME}"
       - "DB_PASSWORD=${POSTGRES_PASSWORD}"
-      - "ES_HOST=http://localhost:9200"
+      - "ES_HOST=http://es:9200"
       - "ES_INDEX=images"
       - "MEDIA_DIR=/data/media"
       - "API_KEY=${API_KEY}"
