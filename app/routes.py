@@ -38,11 +38,10 @@ def post_image_meta(image: ImageIn):
 
     with db.cursor() as cursor:
         stmt = """
-            insert into image (id, doc_id, photographer, caption, description, location, date, url_path)
-            values (%(id)s, %(doc_id)s, %(photographer)s, %(caption)s, %(description)s, %(location)s, %(date)s, %(url_path)s)
+            insert into image (id, photographer, caption, description, location, date, url_path)
+            values (%(id)s, %(photographer)s, %(caption)s, %(description)s, %(location)s, %(date)s, %(url_path)s)
             on conflict (id) do update
             set 
-                doc_id = excluded.doc_id, 
                 photographer = excluded.photographer, 
                 caption = excluded.caption, 
                 description = excluded.description,
