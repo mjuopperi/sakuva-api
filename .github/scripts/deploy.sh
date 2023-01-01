@@ -11,6 +11,6 @@ scp prod/docker-compose.yml "$SSH_USERNAME@$SERVER_ADDRESS:/data/sakuva/docker-c
 # Pull and restart changed
 ssh "$SSH_USERNAME@$SERVER_ADDRESS" "
   cd /data/sakuva
-  sudo docker-compose pull
+  sudo docker-compose pull --quiet
   sudo docker-compose up -d
 "
