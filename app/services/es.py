@@ -8,7 +8,7 @@ from app.models import HasId
 
 settings = get_settings()
 
-es = Elasticsearch("http://localhost:9200")
+es = Elasticsearch(settings.es_host)
 
 
 def index(doc: HasId):
