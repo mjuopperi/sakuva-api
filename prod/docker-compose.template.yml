@@ -15,6 +15,7 @@ services:
 
   es:
     image: elasticsearch:8.5.3
+    restart: always
     environment:
      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
      - "bootstrap.memory_lock=true"
@@ -35,6 +36,7 @@ services:
 
   api:
     image: mjuopperi/sakuva-api:latest
+    restart: always
     environment:
       - "DB_HOST=db"
       - "DB_PORT=5432"
