@@ -12,7 +12,7 @@ from app.dependencies import verify_api_key
 from app.models import ImageIn, ImageOut
 from app.services.db import db
 from app.services import es
-from app.services.image import create_thumbnail
+from app.services.image import create_thumbnail, resize, save_optimized
 from app.util import filename_to_path
 
 settings = get_settings()
@@ -28,10 +28,11 @@ async def post_image(image_file: UploadFile, background_tasks: BackgroundTasks):
 
         request_object_content = await image_file.read()
         image = PIL.Image.open(io.BytesIO(request_object_content))
-        image.save(file_path)
+        resized = resize(image)
+        save_optimized(resized, file_path)
 
         for size in settings.thumbnail_sizes:
-            background_tasks.add_task(create_thumbnail, image, size, image_dir, image_file.filename)
+            background_tasks.add_task(create_thumbnail, resized, size, image_dir, image_file.filename)
 
         return "ok"
     except Exception as e:
