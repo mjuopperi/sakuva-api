@@ -52,6 +52,19 @@ services:
     volumes:
       - media:/data/media
 
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - /data/sakuva/Caddyfile:/etc/caddy/Caddyfile
+      - media:/media
+      - caddy_data:/data
+      - caddy_config:/config
+
 volumes:
   pg_data:
     driver: local
@@ -63,3 +76,7 @@ volumes:
       type: none
       o: bind
       device: /data/media
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
