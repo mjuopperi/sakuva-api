@@ -31,3 +31,9 @@ def date_filter(field_name: str, start: date | None = None, end: date | None = N
     start_filter = {"gte": start.isoformat()} if start else {}
     end_filter = {"lte": end.isoformat()} if end else {}
     return {"range": {field_name: {**start_filter, **end_filter}}}
+
+
+def bool_filter(field_name: str, value: bool | None) -> dict | None:
+    if value is None:
+        return None
+    return {"term": {field_name: value}}

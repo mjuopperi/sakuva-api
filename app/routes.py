@@ -83,11 +83,11 @@ def get_image_meta(image_id: int):
 
 
 @router.get("/image/search", response_model=List[ImageOut])
-def search(q: str | None = "", start: date | None = None, end: date | None = None):
+def search(q: str | None = "", start: date | None = None, end: date | None = None, color: bool | None = None):
     query = {
         "bool": {
             "must": [{"query_string": {"query": f"*{q}*", "fields": ["caption", "description", "location"]}}],
-            "filter": list(filter(None, [es.date_filter("date", start, end)])),
+            "filter": list(filter(None, [es.date_filter("date", start, end), es.bool_filter("is_color", color)])),
         }
     }
     return es.search(query, ImageOut)
