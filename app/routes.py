@@ -87,7 +87,16 @@ def search(q: str | None = "", start: date | None = None, end: date | None = Non
     query = {
         "bool": {
             "must": [{"query_string": {"query": f"*{q}*", "fields": ["caption", "description", "location"]}}],
-            "filter": list(filter(None, [es.date_filter("date", start, end), es.bool_filter("is_color", color)])),
+            "filter": list(
+                filter(
+                    None,
+                    [
+                        es.date_filter("date", start, end),
+                        es.bool_filter("is_color", color),
+                        es.bool_filter("is_placeholder", False),
+                    ],
+                )
+            ),
         }
     }
     return es.search(query, ImageOut)
