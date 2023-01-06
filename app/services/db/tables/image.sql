@@ -5,5 +5,9 @@ create table if not exists image (
   description text not null default '',
   location text,
   date date,
-  url_path text not null
+  url_path text not null,
+  width int not null default 0,
+  height int not null default 0,
+  is_color boolean not null default false,
+  is_placeholder boolean not null default false
 )

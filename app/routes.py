@@ -52,8 +52,8 @@ def post_image_meta(image: ImageIn):
 
     with db.cursor() as cursor:
         stmt = """
-            insert into image (id, photographer, caption, description, location, date, url_path)
-            values (%(id)s, %(photographer)s, %(caption)s, %(description)s, %(location)s, %(date)s, %(url_path)s)
+            insert into image (id, photographer, caption, description, location, date, url_path, width, height, is_color, is_placeholder)
+            values (%(id)s, %(photographer)s, %(caption)s, %(description)s, %(location)s, %(date)s, %(url_path)s, %(width)s, %(height)s, %(is_color)s, %(is_placeholder)s)
             on conflict (id) do update
             set 
                 photographer = excluded.photographer, 
@@ -61,7 +61,11 @@ def post_image_meta(image: ImageIn):
                 description = excluded.description,
                 location = excluded.location,
                 date = excluded.date,
-                url_path = excluded.url_path
+                url_path = excluded.url_path,
+                width = excluded.width,
+                height = excluded.height,
+                is_color = excluded.is_color,
+                is_placeholder = excluded.is_placeholder
         """
         cursor.execute(stmt, image_out.dict())
         es.index(image_out)

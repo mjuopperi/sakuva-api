@@ -29,6 +29,10 @@ class Image(HasId):
     description: str = Field("", description="Media description")
     location: str = Field(description="Name of location where photo was taken", example="Rovaniemi")
     date: date_type | None = Field(None, description="Date when image was taken", example=date_type(1939, 11, 30))
+    width: int = Field(description="Image width", example=2000)
+    height: int = Field(description="Image height", example=1200)
+    is_color: bool = Field(description="True if image is in color", example=True)
+    is_placeholder: bool = Field(description="True if image is a placeholder", example=False)
 
     def get_id(self) -> str:
         return str(self.id)
