@@ -19,8 +19,8 @@ def index(doc: HasId):
 T = TypeVar("T")
 
 
-def search(query: dict, model: Callable[[dict], T]) -> List[T]:
-    res = es.search(index=settings.es_index, query=query)
+def search(query: dict, model: Callable[[dict], T], size: int = 36) -> List[T]:
+    res = es.search(index=settings.es_index, query=query, size=size)
     hits = res.get("hits", {}).get("hits", [])
     return [model(**x.get("_source")) for x in hits]
 
