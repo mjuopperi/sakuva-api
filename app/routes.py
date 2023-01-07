@@ -100,3 +100,13 @@ def search(q: str | None = "", start: date | None = None, end: date | None = Non
         }
     }
     return es.search(query, ImageOut)
+
+
+@router.post("/image/reindex", dependencies=[Depends(verify_api_key)])
+def reindex(ids: List[int]):
+    with db.cursor(row_factory=class_row(ImageOut)) as cursor:
+        cursor.execute("select * from image where id = any(%s)", [ids])
+        images = cursor.fetchall()
+        for image in images:
+            es.index(image)
+        return "ok"
