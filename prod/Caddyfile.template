@@ -13,4 +13,8 @@ $DOMAIN {
     root * /media
     file_server
   }
+  
+  handle {
+  	reverse_proxy web:3000
+  }
 }
