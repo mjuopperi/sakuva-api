@@ -37,3 +37,25 @@ def bool_filter(field_name: str, value: bool | None) -> dict | None:
     if value is None:
         return None
     return {"term": {field_name: value}}
+
+
+def multi_match(value: str) -> dict | None:
+    if value:
+        return {
+            "multi_match": {
+                "query": value,
+                "type": "bool_prefix",
+                "fields": [
+                    "caption^3",
+                    "caption._2gram^3",
+                    "caption._3gram^3",
+                    "description",
+                    "description._2gram",
+                    "description._3gram",
+                    "location",
+                    "location._2gram",
+                    "location._3gram",
+                ],
+            }
+        }
+    return None

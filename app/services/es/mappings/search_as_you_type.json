@@ -1,0 +1,18 @@
+{
+  "mappings": {
+    "properties": {
+      "caption": {
+        "type": "search_as_you_type"
+      },
+      "description": {
+        "type": "search_as_you_type"
+      },
+      "photographer": {
+        "type": "search_as_you_type"
+      },
+      "location": {
+        "type": "search_as_you_type"
+      }
+    }
+  }
+}

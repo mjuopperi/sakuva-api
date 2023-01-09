@@ -44,7 +44,7 @@ services:
       - "DB_USERNAME=${POSTGRES_USERNAME}"
       - "DB_PASSWORD=${POSTGRES_PASSWORD}"
       - "ES_HOST=http://es:9200"
-      - "ES_INDEX=images"
+      - "ES_INDEX=images-0001"
       - "MEDIA_DIR=/data/media"
       - "API_KEY=${API_KEY}"
     ports:

@@ -11,7 +11,7 @@ from app.config import get_settings
 from app.dependencies import verify_api_key
 from app.models import ImageIn, ImageOut
 from app.services.db import db
-from app.services import es
+from app.services.es import es
 from app.services.image import create_thumbnail, resize, save_optimized
 from app.util import filename_to_path
 
@@ -86,7 +86,14 @@ def get_image_meta(image_id: int):
 def search(q: str | None = "", start: date | None = None, end: date | None = None, color: bool | None = None):
     query = {
         "bool": {
-            "must": [{"query_string": {"query": f"*{q}*", "fields": ["caption", "description", "location"]}}],
+            "must": list(
+                filter(
+                    None,
+                    [
+                        es.multi_match(q),
+                    ],
+                )
+            ),
             "filter": list(
                 filter(
                     None,
