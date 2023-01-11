@@ -3,7 +3,8 @@ import os
 from datetime import date
 from typing import List
 
-from fastapi import APIRouter, UploadFile, HTTPException, Depends, BackgroundTasks
+from fastapi import APIRouter, UploadFile, HTTPException, Depends, BackgroundTasks, Query
+from fastapi.responses import Response
 from psycopg.rows import class_row
 import PIL.Image
 
@@ -83,7 +84,22 @@ def get_image_meta(image_id: int):
 
 
 @router.get("/image/search", response_model=List[ImageOut])
-def search(q: str | None = "", start: date | None = None, end: date | None = None, color: bool | None = None):
+def search(
+    response: Response,
+    q: str | None = "",
+    start: date | None = None,
+    end: date | None = None,
+    color: bool | None = None,
+    page: int = Query(default=1, ge=1),
+    size: int = Query(default=15, ge=0, le=50),
+):
+    if (page - 1) * size >= 10_000:
+        # By default, you cannot use from and size to page through more than 10,000 hits.
+        # This limit is a safeguard set by the index.max_result_window index setting.
+        # If you need to page through more than 10,000 hits, use the search_after parameter instead.
+        # https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html
+        raise HTTPException(400, "Too deep")
+
     query = {
         "bool": {
             "must": list(
@@ -106,7 +122,9 @@ def search(q: str | None = "", start: date | None = None, end: date | None = Non
             ),
         }
     }
-    return es.search(query, ImageOut)
+    total, res = es.search(query, ImageOut, size=size, from_=(page - 1) * size)
+    response.headers["X-Total-Count"] = str(total)
+    return res
 
 
 @router.post("/image/reindex", dependencies=[Depends(verify_api_key)])

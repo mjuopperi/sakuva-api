@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Callable, TypeVar, Type, List
+from typing import Callable, TypeVar, List
 
 from elasticsearch import Elasticsearch
 
@@ -19,10 +19,13 @@ def index(doc: HasId):
 T = TypeVar("T")
 
 
-def search(query: dict, model: Callable[[dict], T], size: int = 36) -> List[T]:
-    res = es.search(index=settings.es_index, query=query, size=size)
+def search(query: dict, model: Callable[[dict], T], size: int = 15, from_: int = 0) -> (int, List[T]):
+    res = es.search(index=settings.es_index, query=query, size=size, from_=from_)
     hits = res.get("hits", {}).get("hits", [])
-    return [model(**x.get("_source")) for x in hits]
+    total = res.get("hits").get("total").get("value")
+    if not isinstance(total, int):
+        total = 0
+    return total, [model(**x.get("_source")) for x in hits]
 
 
 def date_filter(field_name: str, start: date | None = None, end: date | None = None) -> dict | None:
