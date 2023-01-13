@@ -5,6 +5,14 @@
 $DOMAIN {
   encode gzip
 
+  log {
+    output file /logs/access.log {
+      roll_size 1gb
+      roll_keep 5
+      roll_keep_for 720h
+    }
+  }
+
   handle /api/* {
     reverse_proxy api:8000
   }
@@ -13,7 +21,7 @@ $DOMAIN {
     root * /media
     file_server
   }
-  
+
   handle {
   	reverse_proxy web:3000
   }

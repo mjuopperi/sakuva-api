@@ -67,6 +67,7 @@ services:
       - "443:443/udp"
     volumes:
       - /data/sakuva/Caddyfile:/etc/caddy/Caddyfile
+      - /data/sakuva/logs/caddy:/logs
       - media:/media
       - caddy_data:/data
       - caddy_config:/config
