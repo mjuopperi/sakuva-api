@@ -41,6 +41,7 @@ jobs:
         env:
           EMAIL: ${{ secrets.EMAIL }}
           DOMAIN: ${{ secrets.DOMAIN }}
+          BACKUP_DOMAIN: ${{ secrets.BACKUP_DOMAIN }}
           SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
